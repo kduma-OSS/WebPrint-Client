@@ -4,6 +4,8 @@
 namespace KDuma\WebPrintClient\Response;
 
 
+use DateTimeImmutable;
+
 class Promise
 {
     private string             $uuid;
@@ -149,4 +151,28 @@ class Promise
         return $this->available_printers;
     }
 
+
+    public static function fromResponse($response)
+    {
+        $body = is_array($response) ? $response : json_decode($response, true);
+
+        if (isset($body['data']))
+            $body = $body['data'];
+
+        return new Promise(
+            $body['uuid'],
+            $body['status'],
+            $body['name'],
+            $body['type'],
+            $body['ppd_options'],
+            $body['content_available'],
+            $body['file_name'],
+            $body['size'],
+            $body['meta'],
+            new DateTimeImmutable($body['created_at']),
+            new DateTimeImmutable($body['updated_at']),
+            $body['selected_printer'] ? Printer::fromResponse($body['selected_printer']) : null,
+            array_map(fn($row) => Printer::fromResponse($row), $body['available_printers'] ?? [])
+        );
+    }
 }

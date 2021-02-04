@@ -35,4 +35,17 @@ class Server
     {
         return $this->uuid;
     }
+
+    public static function fromResponse($response)
+    {
+        $body = is_array($response) ? $response : json_decode($response, true);
+
+        if (isset($body['data']))
+            $body = $body['data'];
+
+        return new Server(
+            $body['name'],
+            $body['uuid'],
+        );
+    }
 }

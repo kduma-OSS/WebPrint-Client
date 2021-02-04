@@ -86,4 +86,22 @@ class Printer
     {
         return $this->ppd_options_layout;
     }
+
+    public static function fromResponse($response)
+    {
+        $body = is_array($response) ? $response : json_decode($response, true);
+
+        if (isset($body['data']))
+            $body = $body['data'];
+
+        return new Printer(
+            $body['uuid'],
+            $body['name'],
+            $body['ppd_support'],
+            $body['raw_languages_supported'],
+            isset($body['server']) ? Server::fromResponse($body['server']) : null,
+            $body['ppd_options'] ?? null,
+            $body['ppd_options_layout'] ?? null,
+        );
+    }
 }

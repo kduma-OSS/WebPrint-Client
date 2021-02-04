@@ -4,6 +4,8 @@
 namespace KDuma\WebPrintClient\Response;
 
 
+use DateTimeImmutable;
+
 class Dialog
 {
     private string             $uuid;
@@ -89,5 +91,24 @@ class Dialog
     public function getUpdatedAt(): \DateTimeImmutable
     {
         return $this->updated_at;
+    }
+
+    public static function fromResponse($response)
+    {
+        $body = is_array($response) ? $response : json_decode($response, true);
+
+        if (isset($body['data']))
+            $body = $body['data'];
+
+        return new Dialog(
+            $body['uuid'],
+            $body['status'],
+            $body['auto_print'],
+            $body['redirect_url'],
+            $body['restricted_ip'],
+            $body['link'],
+            new DateTimeImmutable($body['created_at']),
+            new DateTimeImmutable($body['updated_at'])
+        );
     }
 }
