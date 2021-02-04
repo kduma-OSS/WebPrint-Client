@@ -22,8 +22,10 @@ Available Methods:
 ```php
 //Create Api Client Instance
 $api = new \KDuma\WebPrintClient\WebPrintApi(
-    endpoint: 'https://print.server.local/api/web-print', 
-    key: 'API_KEY'
+    new \KDuma\WebPrintClient\HttpClient\GuzzleHttp7Client(
+        endpoint: 'https://print.server.local/api/web-print', 
+        key: 'API_KEY'
+    )
 );
     
 // Get List of all available printers
@@ -120,8 +122,10 @@ Sample: Use create print Promise and redirect user to print Dialog; Content uplo
 public function PrintDocument()
 {
     $api = new \KDuma\WebPrintClient\WebPrintApi(
-        endpoint: 'https://print.server.local/api/web-print', 
-        key: 'API_KEY'
+        new \KDuma\WebPrintClient\HttpClient\GuzzleHttp7Client(
+            endpoint: 'https://print.server.local/api/web-print', 
+            key: 'API_KEY'
+        )
     );
     
     // Create Promise

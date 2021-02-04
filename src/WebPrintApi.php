@@ -6,6 +6,7 @@ namespace KDuma\WebPrintClient;
 
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;
+use KDuma\WebPrintClient\HttpClient\HttpClientInterface;
 use KDuma\WebPrintClient\Response\Dialog;
 use KDuma\WebPrintClient\Response\Printer;
 use KDuma\WebPrintClient\Response\Promise;
@@ -17,19 +18,11 @@ use Psr\Http\Message\StreamInterface;
 
 class WebPrintApi
 {
-    protected Client $client;
+    protected HttpClientInterface $client;
 
-    public function __construct(string $endpoint, string $key)
+    public function __construct(HttpClientInterface $client)
     {
-        $this->client = new Client([
-            'base_uri' => sprintf("%s/", rtrim($endpoint, '/')),
-            'timeout'  => 15,
-            'headers'  => [
-                'User-Agent'    => 'web-print-api-php-client/1.0',
-                'Accept'        => 'application/json',
-                'Authorization' => sprintf("Bearer %s", $key),
-            ],
-        ]);
+        $this->client = $client;
     }
 
     /**
@@ -49,8 +42,8 @@ class WebPrintApi
         if($with_ppd_options)
             $query['ppd_options'] = 1;
 
-        $response = $this->client->get('printers', ['query' => $query]);
-        $body = json_decode($response->getBody(), true);
+        $response = $this->client->get('printers', $query);
+        $body = json_decode($response, true);
 
         return array_map(fn($row) => new Printer(
             $row['uuid'],
@@ -69,7 +62,7 @@ class WebPrintApi
     public function GetPrinter(string $uuid): Printer
     {
         $response = $this->client->get(sprintf("printers/%s", urlencode($uuid)));
-        $body = json_decode($response->getBody(), true);
+        $body = json_decode($response, true);
 
         return new Printer(
             $body['data']['uuid'],
@@ -92,8 +85,8 @@ class WebPrintApi
      */
     public function GetPromises(int $page = 1, int &$total_pages = null): array
     {
-        $response = $this->client->get('promises', ['query' => ['page' => $page]]);
-        $body = json_decode($response->getBody(), true);
+        $response = $this->client->get('promises', ['page' => $page]);
+        $body = json_decode($response, true);
 
         $total_pages = $body['meta']['last_page'];
 
@@ -133,9 +126,7 @@ class WebPrintApi
     public function PrintPromise(string $uuid)
     {
         $this->client->post("jobs", [
-            'json' => [
-                'promise' => $uuid,
-            ],
+            'promise' => $uuid,
         ]);
     }
 
@@ -144,13 +135,11 @@ class WebPrintApi
     ): void
     {
         $this->client->put(sprintf("promises/%s", urlencode($uuid)), [
-            'json' => [
-                'name' => $name,
-                'printer' => $printer_uuid,
-                'meta' => $meta,
-                'ppd_options' => $ppd_options,
-                'status' => $status,
-            ],
+            'name' => $name,
+            'printer' => $printer_uuid,
+            'meta' => $meta,
+            'ppd_options' => $ppd_options,
+            'status' => $status,
         ]);
     }
 
@@ -160,17 +149,15 @@ class WebPrintApi
     ): Promise
     {
         $response = $this->client->post('promises', [
-            'json' => [
-                'name' => $name,
-                'type' => $type,
-                'printer' => $printer_uuid,
-                'meta' => $meta,
-                'available_printers' => $available_printers,
-                'ppd_options' => $ppd_options,
-                'content' => $content,
-                'file_name' => $file_name,
-                'headless' => $headless,
-            ],
+            'name' => $name,
+            'type' => $type,
+            'printer' => $printer_uuid,
+            'meta' => $meta,
+            'available_printers' => $available_printers,
+            'ppd_options' => $ppd_options,
+            'content' => $content,
+            'file_name' => $file_name,
+            'headless' => $headless,
         ]);
 
         return $this->_parsePromiseResponse($response);
@@ -189,11 +176,9 @@ class WebPrintApi
     public function CreateDialog(string $uuid, bool $auto_print, string $redirect_url, string $restricted_ip = null): Dialog
     {
         $response = $this->client->post(sprintf("promises/%s/dialog", urlencode($uuid)), [
-            'json' => [
-                'restricted_ip' => $restricted_ip,
-                'redirect_url' => $redirect_url,
-                'auto_print' => $auto_print,
-            ],
+            'restricted_ip' => $restricted_ip,
+            'redirect_url' => $redirect_url,
+            'auto_print' => $auto_print,
         ]);
 
         return $this->_parseDialogResponse($response);
@@ -216,25 +201,24 @@ class WebPrintApi
 
     public function SetPromiseContent(string $uuid, $content, ?string $file_name = null)
     {
-        $this->client->post(sprintf("promises/%s/content", urlencode($uuid)), [
-            'body' => $content,
-            'headers' => $file_name ? [
-                'X-File-Name' => $file_name,
-            ] : []
-        ]);
+        $this->client->rawPost(
+            sprintf("promises/%s/content", urlencode($uuid)),
+            $content,
+            $file_name ? ['X-File-Name' => $file_name] : []
+        );
     }
 
 
 
     /**
-     * @param ResponseInterface $response
+     * @param $response
      *
      * @return Promise
      * @throws Exception
      */
-    private function _parsePromiseResponse(ResponseInterface $response): Promise
+    private function _parsePromiseResponse($response): Promise
     {
-        $body = json_decode($response->getBody(), true);
+        $body = json_decode($response, true);
 
         return new Promise(
             $body['data']['uuid'],
@@ -264,14 +248,14 @@ class WebPrintApi
     }
 
     /**
-     * @param ResponseInterface $response
+     * @param $response
      *
      * @return Dialog
      * @throws Exception
      */
-    private function _parseDialogResponse(ResponseInterface $response): Dialog
+    private function _parseDialogResponse($response): Dialog
     {
-        $body = json_decode($response->getBody(), true);
+        $body = json_decode($response, true);
 
         return new Dialog(
             $body['data']['uuid'],
