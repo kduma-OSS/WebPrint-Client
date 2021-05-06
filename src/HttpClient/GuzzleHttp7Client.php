@@ -45,7 +45,7 @@ class GuzzleHttp7Client implements HttpClientInterface
 
     public function rawPost(string $path, $body, array $query = [], array $headers = [])
     {
-        return $this->request('PUT', $path, $query, $headers, null, $body);
+        return $this->request('POST', $path, $query, $headers, null, $body);
     }
 
 
