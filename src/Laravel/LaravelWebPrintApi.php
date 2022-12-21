@@ -14,31 +14,34 @@ class LaravelWebPrintApi extends WebPrintApi implements WebPrintApiInterface
         return parent::GetPrinter($uuid);
     }
 
-    public function UpdatePromise(string  $uuid,
-                                  ?string $name = null,
-                                  ?string $printer_uuid = null,
-                                  ?array  $meta = null,
-                                  ?array  $ppd_options = null,
-                                  ?string $status = null): void
+    public function UpdatePromise(
+        string  $uuid,
+        ?string $name = null,
+        ?string $printer_uuid = null,
+        ?array  $meta = null,
+        ?array  $ppd_options = null,
+        ?string $status = null
+    ): void
     {
         $printer_uuid = config(sprintf("webprint.printers.%s", $printer_uuid)) ?? $printer_uuid;
 
         parent::UpdatePromise($uuid, $name, $printer_uuid, $meta, $ppd_options, $status);
     }
 
-    public function CreatePromise(string  $name,
-                                  string  $type,
-                                  ?array  $meta = null,
-                                  ?string $printer_uuid = null,
-                                  ?array  $available_printers = null,
-                                  ?array  $ppd_options = null,
-                                  ?string $content = null,
-                                  ?string $file_name = null,
-                                  ?bool   $headless = null): Promise
+    public function CreatePromise(
+        string  $name,
+        string  $type,
+        ?array  $meta = null,
+        ?string $printer_uuid = null,
+        ?array  $available_printers = null,
+        ?array  $ppd_options = null,
+        ?string $content = null,
+        ?string $file_name = null,
+        ?bool   $headless = null
+    ): Promise
     {
         $printer_uuid = config(sprintf("webprint.printers.%s", $printer_uuid)) ?? $printer_uuid;
 
         return parent::CreatePromise($name, $type, $meta, $printer_uuid, $available_printers, $ppd_options, $content, $file_name, $headless);
     }
-
 }
