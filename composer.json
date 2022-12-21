@@ -39,12 +39,5 @@
     },
     "config": {
         "sort-packages": true
-    },
-    "extra": {
-        "laravel": {
-            "providers": [
-                "KDuma\\WebPrintClient\\Laravel\\WebPrintClientServiceProvider"
-            ]
-        }
     }
 }
