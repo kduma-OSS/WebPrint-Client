@@ -1,8 +1,6 @@
 <?php
 
-
 namespace KDuma\WebPrintClient;
-
 
 use KDuma\WebPrintClient\HttpClient\HttpClientInterface;
 use KDuma\WebPrintClient\Response\Dialog;
@@ -10,7 +8,7 @@ use KDuma\WebPrintClient\Response\Printer;
 use KDuma\WebPrintClient\Response\Promise;
 use Psr\Http\Message\StreamInterface;
 
-class WebPrintApi
+class WebPrintApi implements WebPrintApiInterface
 {
     protected HttpClientInterface $client;
 
@@ -19,26 +17,22 @@ class WebPrintApi
         $this->client = $client;
     }
 
-    /**
-     * @param string|null $type_filter
-     * @param bool        $with_ppd_options
-     *
-     * @return array|Printer[]
-     */
     public function GetPrinters(string $type_filter = null, bool $with_ppd_options = false): array
     {
         $query = [];
 
-        if($type_filter)
+        if ($type_filter) {
             $query['type'] = $type_filter;
+        }
 
-        if($with_ppd_options)
+        if ($with_ppd_options) {
             $query['ppd_options'] = 1;
+        }
 
         $response = $this->client->get('printers', $query);
         $body = json_decode($response, true);
 
-        return array_map(fn($row) => Printer::fromResponse($row), $body['data']);
+        return array_map(fn ($row) => Printer::fromResponse($row), $body['data']);
     }
 
     public function GetPrinter(string $uuid): Printer
@@ -48,12 +42,6 @@ class WebPrintApi
         return Printer::fromResponse($response);
     }
 
-    /**
-     * @param int      $page
-     * @param int|null $total_pages
-     *
-     * @return array|Promise[]
-     */
     public function GetPromises(int $page = 1, int &$total_pages = null): array
     {
         $response = $this->client->get('promises', ['page' => $page]);
@@ -61,7 +49,7 @@ class WebPrintApi
 
         $total_pages = $body['meta']['last_page'];
 
-        return array_map(fn($row) => Promise::fromResponse($row), $body['data']);
+        return array_map(fn ($row) => Promise::fromResponse($row), $body['data']);
     }
 
     public function GetPromise(string $uuid): Promise
@@ -84,9 +72,13 @@ class WebPrintApi
     }
 
     public function UpdatePromise(
-        string $uuid, ?string $name = null, ?string $printer_uuid = null, ?array $meta = null, ?array $ppd_options = null, ?string $status = null
-    ): void
-    {
+        string $uuid,
+        ?string $name = null,
+        ?string $printer_uuid = null,
+        ?array $meta = null,
+        ?array $ppd_options = null,
+        ?string $status = null
+    ): void {
         $this->client->put(sprintf("promises/%s", urlencode($uuid)), [
             'name' => $name,
             'printer' => $printer_uuid,
@@ -97,10 +89,16 @@ class WebPrintApi
     }
 
     public function CreatePromise(
-        string $name, string $type, ?array $meta = null, ?string $printer_uuid = null, ?array $available_printers = null,
-        ?array $ppd_options = null, ?string $content = null, ?string $file_name = null, ?bool $headless = null
-    ): Promise
-    {
+        string $name,
+        string $type,
+        ?array $meta = null,
+        ?string $printer_uuid = null,
+        ?array $available_printers = null,
+        ?array $ppd_options = null,
+        ?string $content = null,
+        ?string $file_name = null,
+        ?bool $headless = null
+    ): Promise {
         $response = $this->client->post('promises', [
             'name' => $name,
             'type' => $type,
@@ -117,11 +115,23 @@ class WebPrintApi
     }
 
     public function CreatePromiseAndPrint(
-        string $name, string $type, string $printer_uuid, string $file_name, string $content, ?array $ppd_options = null
-    ):Promise
-    {
+        string $name,
+        string $type,
+        string $printer_uuid,
+        string $file_name,
+        string $content,
+        ?array $ppd_options = null
+    ): Promise {
         return $this->CreatePromise(
-            $name, $type, null, $printer_uuid, null, $ppd_options, $content, $file_name, true
+            $name,
+            $type,
+            null,
+            $printer_uuid,
+            null,
+            $ppd_options,
+            $content,
+            $file_name,
+            true
         );
     }
 
