@@ -29,7 +29,7 @@ class WebPrintClientServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'webprint');
 
-        $this->app->bind(HttpClientInterface::class, fn() => new GuzzleHttp7Client(
+        $this->app->bind(HttpClientInterface::class, fn () => new GuzzleHttp7Client(
             config('webprint.endpoint'),
             config('webprint.token'),
         ));
