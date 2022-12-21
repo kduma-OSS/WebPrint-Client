@@ -21,8 +21,7 @@ class LaravelWebPrintApi extends WebPrintApi implements WebPrintApiInterface
         ?array  $meta = null,
         ?array  $ppd_options = null,
         ?string $status = null
-    ): void
-    {
+    ): void {
         $printer_uuid = config(sprintf("webprint.printers.%s", $printer_uuid)) ?? $printer_uuid;
 
         parent::UpdatePromise($uuid, $name, $printer_uuid, $meta, $ppd_options, $status);
@@ -38,8 +37,7 @@ class LaravelWebPrintApi extends WebPrintApi implements WebPrintApiInterface
         ?string $content = null,
         ?string $file_name = null,
         ?bool   $headless = null
-    ): Promise
-    {
+    ): Promise {
         $printer_uuid = config(sprintf("webprint.printers.%s", $printer_uuid)) ?? $printer_uuid;
 
         return parent::CreatePromise($name, $type, $meta, $printer_uuid, $available_printers, $ppd_options, $content, $file_name, $headless);
