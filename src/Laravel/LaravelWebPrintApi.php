@@ -9,37 +9,37 @@ use KDuma\WebPrintClient\WebPrintApiInterface;
 
 class LaravelWebPrintApi extends WebPrintApi implements WebPrintApiInterface
 {
-    public function GetPrinter(string $uuid): Printer
+    public function GetPrinter(string $ulid): Printer
     {
-        return parent::GetPrinter($uuid);
+        return parent::GetPrinter($ulid);
     }
 
     public function UpdatePromise(
-        string  $uuid,
+        string  $ulid,
         ?string $name = null,
-        ?string $printer_uuid = null,
+        ?string $printer_ulid = null,
         ?array  $meta = null,
         ?array  $ppd_options = null,
         ?string $status = null
     ): void {
-        $printer_uuid = config(sprintf("webprint.printers.%s", $printer_uuid)) ?? $printer_uuid;
+        $printer_ulid = config(sprintf("webprint.printers.%s", $printer_ulid)) ?? $printer_ulid;
 
-        parent::UpdatePromise($uuid, $name, $printer_uuid, $meta, $ppd_options, $status);
+        parent::UpdatePromise($ulid, $name, $printer_ulid, $meta, $ppd_options, $status);
     }
 
     public function CreatePromise(
         string  $name,
         string  $type,
         ?array  $meta = null,
-        ?string $printer_uuid = null,
+        ?string $printer_ulid = null,
         ?array  $available_printers = null,
         ?array  $ppd_options = null,
         ?string $content = null,
         ?string $file_name = null,
         ?bool   $headless = null
     ): Promise {
-        $printer_uuid = config(sprintf("webprint.printers.%s", $printer_uuid)) ?? $printer_uuid;
+        $printer_ulid = config(sprintf("webprint.printers.%s", $printer_ulid)) ?? $printer_ulid;
 
-        return parent::CreatePromise($name, $type, $meta, $printer_uuid, $available_printers, $ppd_options, $content, $file_name, $headless);
+        return parent::CreatePromise($name, $type, $meta, $printer_ulid, $available_printers, $ppd_options, $content, $file_name, $headless);
     }
 }

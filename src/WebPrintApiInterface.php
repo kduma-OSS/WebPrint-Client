@@ -17,7 +17,7 @@ interface WebPrintApiInterface
      */
     public function GetPrinters(string $type_filter = null, bool $with_ppd_options = false): array;
 
-    public function GetPrinter(string $uuid): Printer;
+    public function GetPrinter(string $ulid): Printer;
 
     /**
      * @param int      $page
@@ -27,23 +27,23 @@ interface WebPrintApiInterface
      */
     public function GetPromises(int $page = 1, int &$total_pages = null): array;
 
-    public function GetPromise(string $uuid): Promise;
+    public function GetPromise(string $ulid): Promise;
 
-    public function DeletePromise(string $uuid): void;
+    public function DeletePromise(string $ulid): void;
 
-    public function PrintPromise(string $uuid);
+    public function PrintPromise(string $ulid);
 
-    public function UpdatePromise(string $uuid, ?string $name = null, ?string $printer_uuid = null, ?array $meta = null, ?array $ppd_options = null, ?string $status = null): void;
+    public function UpdatePromise(string $ulid, ?string $name = null, ?string $printer_ulid = null, ?array $meta = null, ?array $ppd_options = null, ?string $status = null): void;
 
-    public function CreatePromise(string $name, string $type, ?array $meta = null, ?string $printer_uuid = null, ?array $available_printers = null, ?array $ppd_options = null, ?string $content = null, ?string $file_name = null, ?bool $headless = null): Promise;
+    public function CreatePromise(string $name, string $type, ?array $meta = null, ?string $printer_ulid = null, ?array $available_printers = null, ?array $ppd_options = null, ?string $content = null, ?string $file_name = null, ?bool $headless = null): Promise;
 
-    public function CreatePromiseAndPrint(string $name, string $type, string $printer_uuid, string $file_name, string $content, ?array $ppd_options = null): Promise;
+    public function CreatePromiseAndPrint(string $name, string $type, string $printer_ulid, string $file_name, string $content, ?array $ppd_options = null): Promise;
 
-    public function CreateDialog(string $uuid, bool $auto_print, string $redirect_url, string $restricted_ip = null): Dialog;
+    public function CreateDialog(string $ulid, bool $auto_print, string $redirect_url, string $restricted_ip = null): Dialog;
 
-    public function GetDialog(string $uuid): Dialog;
+    public function GetDialog(string $ulid): Dialog;
 
-    public function GetPromiseContent(string $uuid): StreamInterface;
+    public function GetPromiseContent(string $ulid): StreamInterface;
 
-    public function SetPromiseContent(string $uuid, $content, ?string $file_name = null);
+    public function SetPromiseContent(string $ulid, $content, ?string $file_name = null);
 }

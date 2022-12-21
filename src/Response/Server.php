@@ -7,17 +7,17 @@ namespace KDuma\WebPrintClient\Response;
 class Server
 {
     private string $name;
-    private string $uuid;
+    private string $ulid;
 
-    public function __construct(string $name, string $uuid)
+    public function __construct(string $name, string $ulid)
     {
         $this->name = $name;
-        $this->uuid = $uuid;
+        $this->ulid = $ulid;
     }
 
     public function __toString(): string
     {
-        return $this->uuid;
+        return $this->ulid;
     }
 
     /**
@@ -31,9 +31,9 @@ class Server
     /**
      * @return string
      */
-    public function getUuid(): string
+    public function getulid(): string
     {
-        return $this->uuid;
+        return $this->ulid;
     }
 
     public static function fromResponse($response)
@@ -45,7 +45,7 @@ class Server
 
         return new Server(
             $body['name'],
-            $body['uuid'],
+            $body['ulid'],
         );
     }
 }
