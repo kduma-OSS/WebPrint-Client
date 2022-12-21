@@ -10,7 +10,7 @@ use KDuma\WebPrintClient\Response\Printer;
 use KDuma\WebPrintClient\Response\Promise;
 use Psr\Http\Message\StreamInterface;
 
-class WebPrintApi
+class WebPrintApi implements WebPrintApiInterface
 {
     protected HttpClientInterface $client;
 
@@ -19,12 +19,6 @@ class WebPrintApi
         $this->client = $client;
     }
 
-    /**
-     * @param string|null $type_filter
-     * @param bool        $with_ppd_options
-     *
-     * @return array|Printer[]
-     */
     public function GetPrinters(string $type_filter = null, bool $with_ppd_options = false): array
     {
         $query = [];
@@ -48,12 +42,6 @@ class WebPrintApi
         return Printer::fromResponse($response);
     }
 
-    /**
-     * @param int      $page
-     * @param int|null $total_pages
-     *
-     * @return array|Promise[]
-     */
     public function GetPromises(int $page = 1, int &$total_pages = null): array
     {
         $response = $this->client->get('promises', ['page' => $page]);
