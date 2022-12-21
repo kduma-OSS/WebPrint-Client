@@ -1,51 +1,50 @@
 {
-    "name": "kduma/webprint-client",
-    "description": "WebPrint API Client",
-    "keywords": [
-        "kduma",
-        "webprint-client"
-    ],
-    "homepage": "https://github.com/kduma/webprint-client",
-    "license": "MIT",
-    "type": "library",
-    "authors": [
-        {
-            "name": "Krystian Duma",
-            "email": "git@krystian.duma.sh",
-            "role": "Developer"
-        }
-    ],
-    "require": {
-        "php": "^7.4|^8.0",
-        "guzzlehttp/guzzle": "^7.0.1",
-        "ext-json": "*"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "^7.0"
-    },
-    "autoload": {
-        "psr-4": {
-            "KDuma\\WebPrintClient\\": "src"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "KDuma\\WebPrintClient\\Tests\\": "tests"
-        }
-    },
-    "scripts": {
-        "test": "vendor/bin/phpunit",
-        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
-
-    },
-    "config": {
-        "sort-packages": true
-    },
-    "extra": {
-        "laravel": {
-            "providers": [
-                "KDuma\\WebPrintClient\\Laravel\\WebPrintClientServiceProvider"
-            ]
-        }
+  "name": "kduma/webprint-client",
+  "description": "WebPrint API Client",
+  "keywords": [
+    "kduma",
+    "webprint-client"
+  ],
+  "homepage": "https://github.com/kduma/webprint-client",
+  "license": "MIT",
+  "type": "library",
+  "authors": [
+    {
+      "name": "Krystian Duma",
+      "email": "git@krystian.duma.sh",
+      "role": "Developer"
     }
+  ],
+  "require": {
+    "php": "^7.4|^8.0",
+    "guzzlehttp/guzzle": "^7.0.1",
+    "ext-json": "*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^7.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "KDuma\\WebPrintClient\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "KDuma\\WebPrintClient\\Tests\\": "tests"
+    }
+  },
+  "scripts": {
+    "test": "vendor/bin/phpunit",
+    "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+  },
+  "config": {
+    "sort-packages": true
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "KDuma\\WebPrintClient\\Laravel\\WebPrintClientServiceProvider"
+      ]
+    }
+  }
 }
