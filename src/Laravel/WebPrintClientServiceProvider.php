@@ -17,7 +17,7 @@ class WebPrintClientServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__.'/../config/config.php' => config_path('webprint-client.php'),
+                __DIR__.'/../config/config.php' => config_path('webprint.php'),
             ], 'config');
         }
     }
