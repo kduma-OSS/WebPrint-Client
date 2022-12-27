@@ -167,6 +167,7 @@ class WebPrintApi implements WebPrintApiInterface
         $this->client->rawPost(
             sprintf("promises/%s/content", urlencode($ulid)),
             $content,
+            [],
             $file_name ? ['X-File-Name' => $file_name] : []
         );
     }
