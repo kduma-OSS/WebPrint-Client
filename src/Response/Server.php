@@ -31,7 +31,7 @@ class Server
     /**
      * @return string
      */
-    public function getulid(): string
+    public function getUlid(): string
     {
         return $this->ulid;
     }

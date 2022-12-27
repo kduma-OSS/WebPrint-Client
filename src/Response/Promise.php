@@ -50,7 +50,7 @@ class Promise
     /**
      * @return string
      */
-    public function getulid(): string
+    public function getUlid(): string
     {
         return $this->ulid;
     }
