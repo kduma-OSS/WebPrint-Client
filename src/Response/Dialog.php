@@ -32,7 +32,7 @@ class Dialog
     /**
      * @return string
      */
-    public function getulid(): string
+    public function getUlid(): string
     {
         return $this->ulid;
     }
@@ -93,7 +93,7 @@ class Dialog
         return $this->updated_at;
     }
 
-    public static function fromResponse($response)
+    public static function fromResponse($response): Dialog
     {
         $body = is_array($response) ? $response : json_decode($response, true);
 
