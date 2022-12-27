@@ -2,7 +2,10 @@
 
 namespace KDuma\WebPrintClient\Laravel;
 
-interface LaravelWebPrintApiInterface
-{
+use Illuminate\Support\LazyCollection;
+use KDuma\WebPrintClient\WebPrintApiInterface;
 
+interface LaravelWebPrintApiInterface extends WebPrintApiInterface
+{
+    public function GetPromisesLazy(): LazyCollection;
 }
