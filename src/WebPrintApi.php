@@ -136,7 +136,7 @@ class WebPrintApi implements WebPrintApiInterface
     }
 
 
-    public function CreateDialog(string $ulid, bool $auto_print, string $redirect_url, string $restricted_ip = null): Dialog
+    public function CreateDialog(string $ulid, bool $auto_print = true, string $redirect_url = null, string $restricted_ip = null): Dialog
     {
         $response = $this->client->post(sprintf("promises/%s/dialog", urlencode($ulid)), [
             'restricted_ip' => $restricted_ip,
