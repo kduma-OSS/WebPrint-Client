@@ -1,8 +1,6 @@
 <?php
 
-
 namespace KDuma\WebPrintClient\Response;
-
 
 class Printer
 {
@@ -91,8 +89,9 @@ class Printer
     {
         $body = is_array($response) ? $response : json_decode($response, true);
 
-        if (isset($body['data']))
+        if (isset($body['data'])) {
             $body = $body['data'];
+        }
 
         return new Printer(
             $body['ulid'],

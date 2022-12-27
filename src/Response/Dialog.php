@@ -1,8 +1,6 @@
 <?php
 
-
 namespace KDuma\WebPrintClient\Response;
-
 
 use DateTimeImmutable;
 
@@ -97,8 +95,9 @@ class Dialog
     {
         $body = is_array($response) ? $response : json_decode($response, true);
 
-        if (isset($body['data']))
+        if (isset($body['data'])) {
             $body = $body['data'];
+        }
 
         return new Dialog(
             $body['ulid'],

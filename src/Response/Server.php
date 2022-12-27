@@ -1,8 +1,6 @@
 <?php
 
-
 namespace KDuma\WebPrintClient\Response;
-
 
 class Server
 {
@@ -40,8 +38,9 @@ class Server
     {
         $body = is_array($response) ? $response : json_decode($response, true);
 
-        if (isset($body['data']))
+        if (isset($body['data'])) {
             $body = $body['data'];
+        }
 
         return new Server(
             $body['name'],

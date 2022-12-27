@@ -1,8 +1,6 @@
 <?php
 
-
 namespace KDuma\WebPrintClient\Response;
-
 
 use DateTimeImmutable;
 
@@ -156,8 +154,9 @@ class Promise
     {
         $body = is_array($response) ? $response : json_decode($response, true);
 
-        if (isset($body['data']))
+        if (isset($body['data'])) {
             $body = $body['data'];
+        }
 
         return new Promise(
             $body['ulid'],
@@ -172,7 +171,7 @@ class Promise
             new DateTimeImmutable($body['created_at']),
             new DateTimeImmutable($body['updated_at']),
             $body['selected_printer'] ? Printer::fromResponse($body['selected_printer']) : null,
-            array_map(fn($row) => Printer::fromResponse($row), $body['available_printers'] ?? [])
+            array_map(fn ($row) => Printer::fromResponse($row), $body['available_printers'] ?? [])
         );
     }
 }
