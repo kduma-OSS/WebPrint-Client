@@ -11,6 +11,8 @@ class LaravelWebPrintApi extends WebPrintApi implements WebPrintApiInterface
 {
     public function GetPrinter(string $ulid): Printer
     {
+        $ulid = config(sprintf("webprint.printers.%s", $ulid)) ?? $ulid;
+
         return parent::GetPrinter($ulid);
     }
 
