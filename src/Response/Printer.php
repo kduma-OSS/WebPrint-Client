@@ -6,7 +6,7 @@ namespace KDuma\WebPrintClient\Response;
 
 class Printer
 {
-    private string  $uuid;
+    private string  $ulid;
     private ?Server $server;
     private string  $name;
     private bool   $ppd_support;
@@ -14,9 +14,9 @@ class Printer
     private ?array $ppd_options;
     private ?array $ppd_options_layout;
 
-    public function __construct(string $uuid, string $name, bool $ppd_support, array $raw_languages_supported, ?Server $server = null, array $ppd_options = null, array $ppd_options_layout = null)
+    public function __construct(string $ulid, string $name, bool $ppd_support, array $raw_languages_supported, ?Server $server = null, array $ppd_options = null, array $ppd_options_layout = null)
     {
-        $this->uuid = $uuid;
+        $this->ulid = $ulid;
         $this->server = $server;
         $this->name = $name;
         $this->ppd_support = $ppd_support;
@@ -27,16 +27,16 @@ class Printer
 
     public function __toString(): string
     {
-        return $this->uuid;
+        return $this->ulid;
     }
 
 
     /**
      * @return string
      */
-    public function getUuid(): string
+    public function getulid(): string
     {
-        return $this->uuid;
+        return $this->ulid;
     }
 
     /**
@@ -95,7 +95,7 @@ class Printer
             $body = $body['data'];
 
         return new Printer(
-            $body['uuid'],
+            $body['ulid'],
             $body['name'],
             $body['ppd_support'],
             $body['raw_languages_supported'],

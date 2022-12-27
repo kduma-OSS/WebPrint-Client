@@ -8,7 +8,7 @@ use DateTimeImmutable;
 
 class Dialog
 {
-    private string             $uuid;
+    private string             $ulid;
     private string             $status;
     private bool               $auto_print;
     private ?string            $redirect_url;
@@ -17,9 +17,9 @@ class Dialog
     private \DateTimeImmutable $created_at;
     private \DateTimeImmutable $updated_at;
 
-    public function __construct(string $uuid, string $status, bool $auto_print, ?string $redirect_url, ?string $restricted_ip, string $link, \DateTimeImmutable $created_at, \DateTimeImmutable $updated_at)
+    public function __construct(string $ulid, string $status, bool $auto_print, ?string $redirect_url, ?string $restricted_ip, string $link, \DateTimeImmutable $created_at, \DateTimeImmutable $updated_at)
     {
-        $this->uuid = $uuid;
+        $this->ulid = $ulid;
         $this->status = $status;
         $this->auto_print = $auto_print;
         $this->redirect_url = $redirect_url;
@@ -32,9 +32,9 @@ class Dialog
     /**
      * @return string
      */
-    public function getUuid(): string
+    public function getUlid(): string
     {
-        return $this->uuid;
+        return $this->ulid;
     }
 
     /**
@@ -93,7 +93,7 @@ class Dialog
         return $this->updated_at;
     }
 
-    public static function fromResponse($response)
+    public static function fromResponse($response): Dialog
     {
         $body = is_array($response) ? $response : json_decode($response, true);
 
@@ -101,7 +101,7 @@ class Dialog
             $body = $body['data'];
 
         return new Dialog(
-            $body['uuid'],
+            $body['ulid'],
             $body['status'],
             $body['auto_print'],
             $body['redirect_url'],

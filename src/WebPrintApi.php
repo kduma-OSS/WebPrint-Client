@@ -35,9 +35,9 @@ class WebPrintApi implements WebPrintApiInterface
         return array_map(fn ($row) => Printer::fromResponse($row), $body['data']);
     }
 
-    public function GetPrinter(string $uuid): Printer
+    public function GetPrinter(string $ulid): Printer
     {
-        $response = $this->client->get(sprintf("printers/%s", urlencode($uuid)));
+        $response = $this->client->get(sprintf("printers/%s", urlencode($ulid)));
 
         return Printer::fromResponse($response);
     }
@@ -52,36 +52,36 @@ class WebPrintApi implements WebPrintApiInterface
         return array_map(fn ($row) => Promise::fromResponse($row), $body['data']);
     }
 
-    public function GetPromise(string $uuid): Promise
+    public function GetPromise(string $ulid): Promise
     {
-        $response = $this->client->get(sprintf("promises/%s", urlencode($uuid)));
+        $response = $this->client->get(sprintf("promises/%s", urlencode($ulid)));
 
         return Promise::fromResponse($response);
     }
 
-    public function DeletePromise(string $uuid): void
+    public function DeletePromise(string $ulid): void
     {
-        $this->client->delete(sprintf("promises/%s", urlencode($uuid)));
+        $this->client->delete(sprintf("promises/%s", urlencode($ulid)));
     }
 
-    public function PrintPromise(string $uuid)
+    public function PrintPromise(string $ulid)
     {
         $this->client->post("jobs", [
-            'promise' => $uuid,
+            'promise' => $ulid,
         ]);
     }
 
     public function UpdatePromise(
-        string $uuid,
+        string $ulid,
         ?string $name = null,
-        ?string $printer_uuid = null,
+        ?string $printer_ulid = null,
         ?array $meta = null,
         ?array $ppd_options = null,
         ?string $status = null
     ): void {
-        $this->client->put(sprintf("promises/%s", urlencode($uuid)), [
+        $this->client->put(sprintf("promises/%s", urlencode($ulid)), [
             'name' => $name,
-            'printer' => $printer_uuid,
+            'printer' => $printer_ulid,
             'meta' => $meta,
             'ppd_options' => $ppd_options,
             'status' => $status,
@@ -92,7 +92,7 @@ class WebPrintApi implements WebPrintApiInterface
         string $name,
         string $type,
         ?array $meta = null,
-        ?string $printer_uuid = null,
+        ?string $printer_ulid = null,
         ?array $available_printers = null,
         ?array $ppd_options = null,
         ?string $content = null,
@@ -102,7 +102,7 @@ class WebPrintApi implements WebPrintApiInterface
         $response = $this->client->post('promises', [
             'name' => $name,
             'type' => $type,
-            'printer' => $printer_uuid,
+            'printer' => $printer_ulid,
             'meta' => $meta,
             'available_printers' => $available_printers,
             'ppd_options' => $ppd_options,
@@ -117,7 +117,7 @@ class WebPrintApi implements WebPrintApiInterface
     public function CreatePromiseAndPrint(
         string $name,
         string $type,
-        string $printer_uuid,
+        string $printer_ulid,
         string $file_name,
         string $content,
         ?array $ppd_options = null
@@ -126,7 +126,7 @@ class WebPrintApi implements WebPrintApiInterface
             $name,
             $type,
             null,
-            $printer_uuid,
+            $printer_ulid,
             null,
             $ppd_options,
             $content,
@@ -136,9 +136,9 @@ class WebPrintApi implements WebPrintApiInterface
     }
 
 
-    public function CreateDialog(string $uuid, bool $auto_print, string $redirect_url, string $restricted_ip = null): Dialog
+    public function CreateDialog(string $ulid, bool $auto_print = true, string $redirect_url = null, string $restricted_ip = null): Dialog
     {
-        $response = $this->client->post(sprintf("promises/%s/dialog", urlencode($uuid)), [
+        $response = $this->client->post(sprintf("promises/%s/dialog", urlencode($ulid)), [
             'restricted_ip' => $restricted_ip,
             'redirect_url' => $redirect_url,
             'auto_print' => $auto_print,
@@ -147,26 +147,27 @@ class WebPrintApi implements WebPrintApiInterface
         return Dialog::fromResponse($response);
     }
 
-    public function GetDialog(string $uuid): Dialog
+    public function GetDialog(string $ulid): Dialog
     {
-        $response = $this->client->get(sprintf("promises/%s/dialog", urlencode($uuid)));
+        $response = $this->client->get(sprintf("promises/%s/dialog", urlencode($ulid)));
 
         return Dialog::fromResponse($response);
     }
 
 
-    public function GetPromiseContent(string $uuid): StreamInterface
+    public function GetPromiseContent(string $ulid): StreamInterface
     {
-        $response = $this->client->get(sprintf("promises/%s/content", urlencode($uuid)));
+        $response = $this->client->get(sprintf("promises/%s/content", urlencode($ulid)));
 
         return $response;
     }
 
-    public function SetPromiseContent(string $uuid, $content, ?string $file_name = null)
+    public function SetPromiseContent(string $ulid, $content, ?string $file_name = null)
     {
         $this->client->rawPost(
-            sprintf("promises/%s/content", urlencode($uuid)),
+            sprintf("promises/%s/content", urlencode($ulid)),
             $content,
+            [],
             $file_name ? ['X-File-Name' => $file_name] : []
         );
     }

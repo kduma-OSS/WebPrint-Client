@@ -8,7 +8,7 @@ use DateTimeImmutable;
 
 class Promise
 {
-    private string             $uuid;
+    private string             $ulid;
     private string             $status;
     private string             $name;
     private string             $type;
@@ -25,9 +25,9 @@ class Promise
      */
     private ?array $available_printers;
 
-    public function __construct(string $uuid, string $status, string $name, string $type, ?array $ppd_options, bool $content_available, ?string $file_name, ?int $size, ?array $meta, \DateTimeImmutable $created_at, \DateTimeImmutable $updated_at, ?Printer $selected_printer, ?array $available_printers = null)
+    public function __construct(string $ulid, string $status, string $name, string $type, ?array $ppd_options, bool $content_available, ?string $file_name, ?int $size, ?array $meta, \DateTimeImmutable $created_at, \DateTimeImmutable $updated_at, ?Printer $selected_printer, ?array $available_printers = null)
     {
-        $this->uuid = $uuid;
+        $this->ulid = $ulid;
         $this->status = $status;
         $this->name = $name;
         $this->type = $type;
@@ -44,15 +44,15 @@ class Promise
 
     public function __toString(): string
     {
-        return $this->uuid;
+        return $this->ulid;
     }
 
     /**
      * @return string
      */
-    public function getUuid(): string
+    public function getulid(): string
     {
-        return $this->uuid;
+        return $this->ulid;
     }
 
     /**
@@ -160,7 +160,7 @@ class Promise
             $body = $body['data'];
 
         return new Promise(
-            $body['uuid'],
+            $body['ulid'],
             $body['status'],
             $body['name'],
             $body['type'],
