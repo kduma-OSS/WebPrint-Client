@@ -17,7 +17,7 @@ composer require kduma/webprint-client
 
 ## Usage
 
-Check documentation here: https://opensource.duma.sh/libraries/webprint-client
+Check documentation here: [opensource.duma.sh/libraries/php/webprint](https://opensource.duma.sh/libraries/php/webprint)
 
 ### Testing
 
