@@ -15,7 +15,7 @@ interface WebPrintApiInterface
      *
      * @return array|Printer[]
      */
-    public function GetPrinters(string $type_filter = null, bool $with_ppd_options = false): array;
+    public function GetPrinters(?string $type_filter = null, bool $with_ppd_options = false): array;
 
     public function GetPrinter(string $ulid): Printer;
 
@@ -25,7 +25,7 @@ interface WebPrintApiInterface
      *
      * @return array|Promise[]
      */
-    public function GetPromises(int $page = 1, int &$total_pages = null): array;
+    public function GetPromises(int $page = 1, ?int &$total_pages = null): array;
 
     public function GetPromise(string $ulid): Promise;
 
@@ -39,7 +39,7 @@ interface WebPrintApiInterface
 
     public function CreatePromiseAndPrint(string $name, string $type, string $printer_ulid, string $file_name, string $content, ?array $ppd_options = null): Promise;
 
-    public function CreateDialog(string $ulid, bool $auto_print, string $redirect_url, string $restricted_ip = null): Dialog;
+    public function CreateDialog(string $ulid, bool $auto_print, ?string $redirect_url, ?string $restricted_ip = null): Dialog;
 
     public function GetDialog(string $ulid): Dialog;
 

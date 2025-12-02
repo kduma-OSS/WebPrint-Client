@@ -14,7 +14,7 @@ class Printer
     private ?array $ppd_options;
     private ?array $ppd_options_layout;
 
-    public function __construct(string $ulid, string $name, bool $ppd_support, array $raw_languages_supported, ?Server $server = null, array $ppd_options = null, array $ppd_options_layout = null)
+    public function __construct(string $ulid, string $name, bool $ppd_support, array $raw_languages_supported, ?Server $server = null, ?array $ppd_options = null, ?array $ppd_options_layout = null)
     {
         $this->ulid = $ulid;
         $this->server = $server;

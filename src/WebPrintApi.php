@@ -17,7 +17,7 @@ class WebPrintApi implements WebPrintApiInterface
         $this->client = $client;
     }
 
-    public function GetPrinters(string $type_filter = null, bool $with_ppd_options = false): array
+    public function GetPrinters(?string $type_filter = null, bool $with_ppd_options = false): array
     {
         $query = [];
 
@@ -42,7 +42,7 @@ class WebPrintApi implements WebPrintApiInterface
         return Printer::fromResponse($response);
     }
 
-    public function GetPromises(int $page = 1, int &$total_pages = null): array
+    public function GetPromises(int $page = 1, ?int &$total_pages = null): array
     {
         $response = $this->client->get('promises', ['page' => $page]);
         $body = json_decode($response, true);
@@ -136,7 +136,7 @@ class WebPrintApi implements WebPrintApiInterface
     }
 
 
-    public function CreateDialog(string $ulid, bool $auto_print = true, string $redirect_url = null, string $restricted_ip = null): Dialog
+    public function CreateDialog(string $ulid, bool $auto_print = true, ?string $redirect_url = null, ?string $restricted_ip = null): Dialog
     {
         $response = $this->client->post(sprintf("promises/%s/dialog", urlencode($ulid)), [
             'restricted_ip' => $restricted_ip,
